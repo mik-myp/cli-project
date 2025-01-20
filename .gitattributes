@@ -1,0 +1,5 @@
+# 强制所有文本文件使用 LF 行结束符
+* text=auto eol=lf
+
+# 对于 package-lock.json 和其他 JSON 文件，强制使用 LF
+*.json text eol=lf
