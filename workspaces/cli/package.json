@@ -1,0 +1,18 @@
+{
+  "name": "m-workspaces-cli",
+  "version": "1.0.0",
+  "main": "index.js",
+  "bin": {
+    "m-workspaces-cli": "bin/cli.mjs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "m-workspaces-a": "^1.0.0",
+    "m-workspaces-b": "^1.0.0"
+  }
+}
