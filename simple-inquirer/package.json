@@ -1,0 +1,19 @@
+{
+  "name": "simple-inquirer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "simple-inquirer": "bin/index.mjs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ansi-escapes": "^7.0.0",
+    "mute-stream": "^2.0.0",
+    "rxjs": "^7.8.1"
+  }
+}
