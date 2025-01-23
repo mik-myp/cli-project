@@ -1,0 +1,35 @@
+{
+  "name": "m-lerna-cli",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "mayupeng <2836365261@qq.com>",
+  "homepage": "https://github.com/mik-myp/cli-project#readme",
+  "license": "ISC",
+  "main": "src/cli.mjs",
+  "module": "dist/cli.module.js",
+  "bin": {
+    "m-lerna-cli": "bin/cli.mjs"
+  },
+  "directories": {
+    "lib": "dist",
+    "test": "__tests__"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mik-myp/cli-project.git"
+  },
+  "scripts": {
+    "test": "node ./__tests__/cli.test.mjs"
+  },
+  "dependencies": {
+    "yargs": "^17.7.2"
+  },
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/mik-myp/cli-project/issues"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "m-lerna-b",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "mayupeng <2836365261@qq.com>",
+  "homepage": "https://github.com/mik-myp/cli-project#readme",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mik-myp/cli-project.git"
+  },
+  "scripts": {
+    "test": "node ./__tests__/b.test.js"
+  },
+  "bugs": {
+    "url": "https://github.com/mik-myp/cli-project/issues"
+  }
+}
