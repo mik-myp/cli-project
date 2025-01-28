@@ -1,13 +1,13 @@
-import log from 'npmlog';
-import isDebug from './isDebug.js';
+import log from "npmlog";
+import isDebug from "./isDebug.js";
 
 if (isDebug()) {
-  log.level = 'verbose';
+  log.level = "verbose";
 } else {
-  log.level = 'info';
+  log.level = "info";
 }
 
-log.heading = 'imooc';
-log.addLevel('success', 2000, { fg: 'green', bold: true });
+log.heading = "imooc";
+log.addLevel("success", 2000, { fg: "green", bold: true });
 
 export default log;

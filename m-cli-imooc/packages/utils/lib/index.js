@@ -1,5 +1,7 @@
-import log from './log.js';
-import isDebug from './isDebug.js';
+import log from "./log.js";
+import isDebug from "./isDebug.js";
+import { makeList, makeInput } from "./inquirer.js";
+import { getLatestVersion } from "./npm.js";
 
 export function printErrorLog(e, type) {
   if (isDebug()) {
@@ -9,7 +11,4 @@ export function printErrorLog(e, type) {
   }
 }
 
-export {
-  log,
-  isDebug,
-};
+export { log, isDebug, makeList, makeInput, getLatestVersion };
