@@ -1,24 +1,16 @@
 import { homedir } from "node:os";
-import { log, makeList, makeInput, getLatestVersion } from "@mkeke-imooc/utils";
+import {
+  log,
+  makeList,
+  makeInput,
+  getLatestVersion,
+  request,
+  printErrorLog,
+} from "@mkeke-imooc/utils";
 import path from "node:path";
 
 const ADD_TYPE_PAGE = "page";
 const ADD_TYPE_PROJECT = "project";
-
-const ADD_TEMPLATE = [
-  {
-    name: "vue3项目模板",
-    npmName: "@mkeke-imooc/template-vue3",
-    value: "template-vue3",
-    version: "1.0.0",
-  },
-  {
-    name: "react项目模板",
-    npmName: "@mkeke-imooc/template-react18",
-    value: "template-react18",
-    version: "1.0.0",
-  },
-];
 
 const ADD_TYPE = [
   {
@@ -47,7 +39,7 @@ function getAddName() {
   });
 }
 
-function getAddTemplate() {
+function getAddTemplate(ADD_TEMPLATE) {
   return makeList({
     choices: ADD_TEMPLATE,
     message: "请选择初始化模板",
@@ -55,11 +47,41 @@ function getAddTemplate() {
   });
 }
 
+function getTeamList(teamList) {
+  return makeList({
+    choices: teamList.map((item) => {
+      return {
+        name: item,
+        value: item,
+      };
+    }),
+    message: "请选择团队",
+  });
+}
+
 function makeTargetPath() {
   return path.resolve(`${homedir()}/${TEMP_HOME}`, "addTemplate");
 }
 
+async function getTemplateFromAPI() {
+  try {
+    const data = await request({
+      url: "/v1/project",
+      method: "get",
+    });
+    log.verbose("data", data);
+    return data;
+  } catch (error) {
+    printErrorLog(error);
+    return null;
+  }
+}
+
 export default async function createTemplate(name, opts) {
+  const ADD_TEMPLATE = await getTemplateFromAPI();
+  if (!ADD_TEMPLATE) {
+    throw new Error("项目模板不存在！");
+  }
   const { type, template } = opts;
   // 获取创建类型
   let addType;
@@ -82,10 +104,17 @@ export default async function createTemplate(name, opts) {
       addName = await getAddName();
     }
     log.verbose("addName", addName);
+
+    const teamList = [...new Set(ADD_TEMPLATE.map((item) => item.team))];
+
+    const team = await getTeamList(teamList);
+
     if (template) {
       addTemplate = template;
     } else {
-      addTemplate = await getAddTemplate();
+      addTemplate = await getAddTemplate(
+        ADD_TEMPLATE.filter((item) => item.team === team)
+      );
     }
     log.verbose("addTemplate", addTemplate);
     const selectedTemplate = ADD_TEMPLATE.find(
