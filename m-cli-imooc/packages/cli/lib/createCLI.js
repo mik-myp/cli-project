@@ -5,7 +5,6 @@ import fse from "fs-extra";
 import { log } from "@mkeke-imooc/utils";
 import semver from "semver";
 import chalk from "chalk";
-import Init from "@mkeke-imooc/init";
 
 const __dirname = dirname(import.meta);
 const pkgPath = path.resolve(__dirname, "../package.json");
@@ -41,7 +40,6 @@ export default function createCLI() {
       log.verbose("debug", "launch debug mode");
     }
   });
-  Init(program);
   program.on("command:*", function (obj) {
     log.error("未知的命令：" + obj[0]);
   });
