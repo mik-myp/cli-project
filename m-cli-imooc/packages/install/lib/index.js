@@ -1,13 +1,11 @@
 import ora from "ora";
 import Command from "@mkeke-imooc/command";
 import {
-  Github,
-  Gitee,
   makeList,
   log,
-  getGitPlatform,
   makeInput,
   printErrorLog,
+  initGitServer,
 } from "@mkeke-imooc/utils";
 
 const PREV_PAGE = "${prev_page}";
@@ -75,32 +73,7 @@ class InstallCommand extends Command {
   }
 
   async generateGitAPI() {
-    let platform = getGitPlatform();
-    if (!platform) {
-      platform = await makeList({
-        message: "请选择Git平台",
-        choices: [
-          {
-            name: "GitHub",
-            value: "github",
-          },
-          {
-            name: "Gitee",
-            value: "gitee",
-          },
-        ],
-      });
-    }
-    log.verbose("platform", platform);
-    let gitAPI;
-    if (platform === "github") {
-      gitAPI = new Github();
-    } else {
-      gitAPI = new Gitee();
-    }
-    gitAPI.savePlatform(platform);
-    await gitAPI.init();
-    this.gitAPI = gitAPI;
+    this.gitAPI = await initGitServer();
   }
 
   async searchGitAPI() {

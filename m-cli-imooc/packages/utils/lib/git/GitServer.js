@@ -1,15 +1,17 @@
-import { homedir } from "node:os";
 import path from "node:path";
+import fs from "node:fs";
+import { homedir } from "node:os";
 import { pathExistsSync } from "path-exists";
 import fse from "fs-extra";
-import { makePassword } from "../inquirer.js";
-import log from "../log.js";
-import fs from "node:fs";
 import { execa } from "execa";
+import { makeList, makePassword } from "../inquirer.js";
+import log from "../log.js";
 
-const TEMP_HOME = ".mkeke-imooc-cli";
+const TEMP_HOME = ".cli-imooc";
 const TEMP_TOKEN = ".git_token";
 const TEMP_PLATFORM = ".git_platform";
+const TEMP_OWN = ".git_own";
+const TEMP_LOGIN = ".git_login";
 
 function createTokenPath() {
   return path.resolve(homedir(), TEMP_HOME, TEMP_TOKEN);
@@ -19,6 +21,14 @@ function createPlatformPath() {
   return path.resolve(homedir(), TEMP_HOME, TEMP_PLATFORM);
 }
 
+function createOwnPath() {
+  return path.resolve(homedir(), TEMP_HOME, TEMP_OWN);
+}
+
+function createLoginPath() {
+  return path.resolve(homedir(), TEMP_HOME, TEMP_LOGIN);
+}
+
 function getGitPlatform() {
   if (pathExistsSync(createPlatformPath())) {
     return fs.readFileSync(createPlatformPath()).toString();
@@ -26,16 +36,16 @@ function getGitPlatform() {
   return null;
 }
 
-function getProjectPath(cwd, fullName) {
-  const projectName = fullName.split("/")[1]; // vuejs/vue => vue
-  return path.resolve(cwd, projectName);
+function getGitOwn() {
+  if (pathExistsSync(createOwnPath())) {
+    return fs.readFileSync(createOwnPath()).toString();
+  }
+  return null;
 }
 
-function getPackageJson(cwd, fullName) {
-  const projectPath = getProjectPath(cwd, fullName);
-  const pkgPath = path.resolve(projectPath, "package.json");
-  if (pathExistsSync(pkgPath)) {
-    return fse.readJsonSync(pkgPath);
+function getGitLogin() {
+  if (pathExistsSync(createLoginPath())) {
+    return fs.readFileSync(createLoginPath()).toString();
   }
   return null;
 }
@@ -66,9 +76,28 @@ class GitServer {
     fs.writeFileSync(createPlatformPath(), platform);
   }
 
+  saveOwn(own) {
+    this.own = own;
+    fs.writeFileSync(createOwnPath(), own);
+  }
+
+  saveLogin(login) {
+    this.login = login;
+    fs.writeFileSync(createLoginPath(), login);
+  }
+
   getPlatform() {
     return this.platform;
   }
+
+  getOwn() {
+    return this.own;
+  }
+
+  getLogin() {
+    return this.login;
+  }
+
   cloneRepo(fullName, tag) {
     if (tag) {
       return execa("git", ["clone", this.getRepoUrl(fullName), "-b", tag]);
@@ -76,6 +105,7 @@ class GitServer {
       return execa("git", ["clone", this.getRepoUrl(fullName)]);
     }
   }
+
   installDependencies(cwd, fullName) {
     const projectPath = getProjectPath(cwd, fullName);
     if (pathExistsSync(projectPath)) {
@@ -112,6 +142,43 @@ class GitServer {
       }
     }
   }
+
+  getUser() {
+    throw new Error("getUser must be implemented!");
+  }
+
+  getOrg() {
+    throw new Error("getOrg must be implemented!");
+  }
+
+  createRepo() {
+    throw new Error("createRepo must be implemented!");
+  }
 }
 
-export { GitServer, getGitPlatform };
+function getPackageJson(cwd, fullName) {
+  const projectPath = getProjectPath(cwd, fullName);
+  const pkgPath = path.resolve(projectPath, "package.json");
+  if (pathExistsSync(pkgPath)) {
+    return fse.readJsonSync(pkgPath);
+  }
+  return null;
+}
+
+function getProjectPath(cwd, fullName) {
+  const projectName = fullName.split("/")[1]; // vuejs/vue => vue
+  return path.resolve(cwd, projectName);
+}
+
+function clearCache() {
+  const platform = createPlatformPath();
+  const token = createTokenPath();
+  const own = createOwnPath();
+  const login = createLoginPath();
+  fse.removeSync(platform);
+  fse.removeSync(token);
+  fse.removeSync(own);
+  fse.removeSync(login);
+}
+
+export { GitServer, getGitPlatform, clearCache, getGitOwn, getGitLogin };

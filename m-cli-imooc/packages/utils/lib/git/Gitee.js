@@ -1,5 +1,6 @@
-import { GitServer } from "./GitServer.js";
 import axios from "axios";
+import { GitServer } from "./GitServer.js";
+import log from "../log.js";
 
 const BASE_URL = "https://gitee.com/api/v5";
 
@@ -10,7 +11,6 @@ class Gitee extends GitServer {
       baseURL: BASE_URL,
       timeout: 5000,
     });
-
     this.service.interceptors.response.use(
       (response) => {
         return response.data;
@@ -33,7 +33,7 @@ class Gitee extends GitServer {
     });
   }
 
-  post(url, params, headers) {
+  post(url, data, headers) {
     return this.service({
       url,
       data,
@@ -58,6 +58,37 @@ class Gitee extends GitServer {
   getRepoUrl(fullName) {
     // https://gitee.com/imooc-project/commit-test.git
     return `https://gitee.com/${fullName}.git`;
+  }
+
+  getUser() {
+    return this.get("/user");
+  }
+
+  getOrg() {
+    return this.get("/user/orgs");
+  }
+
+  getRepo(owner, repo) {
+    return this.get(`/repos/${owner}/${repo}`).catch((err) => {
+      return null;
+    });
+  }
+
+  async createRepo(name) {
+    // 检查远程仓库是否存在，如果存在，则跳过创建
+    const repo = await this.getRepo(this.login, name);
+    if (!repo) {
+      log.info("仓库不存在，开始创建");
+      if (this.own === "user") {
+        return this.post("/user/repos", { name });
+      } else if (this.own === "org") {
+        const url = "orgs/" + this.login + "/repos";
+        return this.post(url, { name });
+      }
+    } else {
+      log.info("仓库存在，直接返回");
+      return repo;
+    }
   }
 }
 

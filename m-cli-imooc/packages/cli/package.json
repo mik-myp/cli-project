@@ -25,6 +25,7 @@
     "@mkeke-imooc/install": "^0.0.0",
     "@mkeke-imooc/lint": "^0.0.0",
     "@mkeke-imooc/utils": "^0.0.0",
+    "@mkeke-imooc/commit": "^0.0.0",
     "chalk": "^5.1.0",
     "commander": "^9.4.1",
     "dirname-filename-esm": "^1.1.1",

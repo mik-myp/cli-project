@@ -1,5 +1,5 @@
 {
-  "name": "@mkeke-imooc/install",
+  "name": "@mkeke-imooc/commit",
   "version": "0.0.0",
   "description": "> TODO: description",
   "author": "mayupeng <2836365261@qq.com>",
@@ -18,7 +18,7 @@
     "url": "git+https://github.com/mik-myp/cli-project.git"
   },
   "scripts": {
-    "test": "node ./__tests__/install.test.js"
+    "test": "node ./__tests__/commit.test.js"
   },
   "bugs": {
     "url": "https://github.com/mik-myp/cli-project/issues"
@@ -27,6 +27,8 @@
   "dependencies": {
     "@mkeke-imooc/command": "^0.0.0",
     "@mkeke-imooc/utils": "^0.0.0",
-    "ora": "^6.1.2"
+    "fs-extra": "^11.1.0",
+    "semver": "^7.3.8",
+    "simple-git": "^3.15.1"
   }
 }
