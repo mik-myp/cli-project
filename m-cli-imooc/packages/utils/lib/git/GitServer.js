@@ -7,7 +7,7 @@ import { execa } from "execa";
 import { makeList, makePassword } from "../inquirer.js";
 import log from "../log.js";
 
-const TEMP_HOME = ".cli-imooc";
+const TEMP_HOME = ".mkeke-imooc-cli";
 const TEMP_TOKEN = ".git_token";
 const TEMP_PLATFORM = ".git_platform";
 const TEMP_OWN = ".git_own";
